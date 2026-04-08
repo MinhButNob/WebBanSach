@@ -23,5 +23,8 @@ public class BookAuthor {
     @ManyToOne
     @JoinColumn(name = "author_id", insertable = false, updatable = false)
     private Author author;
+
+    @Column(name = "status", length = 20)
+    private String status;
 }
 

@@ -26,5 +26,8 @@ public class Author {
 
     @Column(name = "awards_count")
     private Integer awardsCount;
+
+    @Column(name = "status", length = 20)
+    private String status;
 }
 

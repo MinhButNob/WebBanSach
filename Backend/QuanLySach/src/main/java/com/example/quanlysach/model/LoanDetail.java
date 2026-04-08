@@ -31,5 +31,8 @@ public class LoanDetail {
     @ManyToOne
     @JoinColumn(name = "book_id", insertable = false, updatable = false)
     private Book book;
+
+    @Column(name = "status", length = 20)
+    private String status;
 }
 

@@ -26,5 +26,8 @@ public class Publisher {
 
     @Column(name = "average_loan_days")
     private Integer averageLoanDays;
+
+    @Column(name = "status", length = 20)
+    private String status;
 }
 

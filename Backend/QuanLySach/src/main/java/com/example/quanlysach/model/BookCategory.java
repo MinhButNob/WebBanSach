@@ -23,5 +23,8 @@ public class BookCategory {
     @ManyToOne
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
+
+    @Column(name = "status", length = 20)
+    private String status;
 }
 

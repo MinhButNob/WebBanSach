@@ -26,5 +26,8 @@ public class Category {
 
     @Column(name = "total_books")
     private Integer totalBooks;
+
+    @Column(name = "status", length = 20)
+    private String status;
 }
 

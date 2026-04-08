@@ -48,6 +48,9 @@ public class Book {
     @Column(name = "publisher_id")
     private Long publisherId;
 
+    @Column(name = "status", length = 20)
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "publisher_id", insertable = false, updatable = false)
     private Publisher publisher;
