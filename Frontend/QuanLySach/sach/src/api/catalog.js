@@ -1,23 +1,13 @@
-import axiosClient from './axios'
+import axios from 'axios'
 
-const resourceApi = (resource) => ({
-  getAll() {
-    return axiosClient.get(`/catalog/${resource}`)
-  },
-  create(payload) {
-    return axiosClient.post(`/catalog/${resource}`, payload)
-  },
-  update(id, payload) {
-    return axiosClient.put(`/catalog/${resource}/${id}`, payload)
-  },
-  delete(id) {
-    return axiosClient.delete(`/catalog/${resource}/${id}`)
-  },
-})
+const API = 'http://localhost:8080/api/catalog'
 
-export const catalogApi = {
-  authors: resourceApi('authors'),
-  categories: resourceApi('categories'),
-  publishers: resourceApi('publishers'),
-  shelves: resourceApi('shelves'),
-}
+export const getAll = () => axios.get(API)
+
+export const getActive = () => axios.get(`${API}/active`)
+
+export const create = (data) => axios.post(API, data)
+
+export const update = (id, data) => axios.put(`${API}/${id}`, data)
+
+export const remove = (id) => axios.delete(`${API}/${id}`)

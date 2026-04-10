@@ -9,10 +9,7 @@ import { users } from '../../data/mockData'
         <h1 class="h3 fw-bold mb-1">Admin Nguoi dung</h1>
         <p class="text-muted mb-0">Quan ly nguoi dung da dang ky va trang thai thanh vien.</p>
       </div>
-      <button type="button" class="btn btn-primary">
-        <FaIcon name="fa-user-plus" class="me-2" />
-        Them nguoi dung
-      </button>
+      <button type="button" class="btn btn-primary">Them nguoi dung</button>
     </div>
 
     <div class="card border-0 shadow-sm">

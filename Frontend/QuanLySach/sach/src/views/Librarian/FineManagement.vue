@@ -101,11 +101,9 @@
                   class="btn btn-sm btn-primary me-2"
                   @click="openPaymentForm(fine)"
                 >
-                  <FaIcon name="fa-credit-card" />
+                  Thanh toan
                 </button>
-                <button class="btn btn-sm btn-info" @click="viewDetails(fine)">
-                  <FaIcon name="fa-eye" />
-                </button>
+                <button class="btn btn-sm btn-info" @click="viewDetails(fine)">Chi tiet</button>
               </td>
             </tr>
           </tbody>
@@ -173,7 +171,6 @@
               Huy
             </button>
             <button @click="confirmPayment" type="button" class="btn btn-success">
-              <FaIcon name="fa-check" class="me-2" />
               Xac nhan thanh toan
             </button>
           </div>
@@ -238,7 +235,6 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import FaIcon from '@/components/common/FaIcon.vue'
 
 const searchQuery = ref('')
 const statusFilter = ref('')

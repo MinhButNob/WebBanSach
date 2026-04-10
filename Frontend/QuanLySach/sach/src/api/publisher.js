@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API = 'http://localhost:8080/api/reservations'
+const API = 'http://localhost:8080/api/publishers'
 
 export const getAll = () => axios.get(API)
 

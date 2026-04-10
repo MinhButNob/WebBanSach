@@ -12,9 +12,6 @@
                 <h6 class="card-subtitle text-muted mb-1">{{ stat.label }}</h6>
                 <h3 class="card-title mb-0">{{ stat.value }}</h3>
               </div>
-              <div class="ms-auto">
-                <FaIcon :name="stat.icon" size="3x" :class="`text-${stat.tone}`" />
-              </div>
             </div>
           </div>
         </div>
@@ -32,37 +29,31 @@
             <div class="row g-2">
               <div class="col-6">
                 <RouterLink to="/librarian/books" class="btn btn-outline-primary w-100">
-                  <FaIcon name="fa-book" class="me-2" />
                   Quan ly Sach
                 </RouterLink>
               </div>
               <div class="col-6">
                 <RouterLink to="/librarian/inventory" class="btn btn-outline-primary w-100">
-                  <FaIcon name="fa-boxes-stacked" class="me-2" />
                   Kho sach
                 </RouterLink>
               </div>
               <div class="col-6">
                 <RouterLink to="/librarian/loans" class="btn btn-outline-success w-100">
-                  <FaIcon name="fa-handshake" class="me-2" />
                   Xử ly muon sach
                 </RouterLink>
               </div>
               <div class="col-6">
                 <RouterLink to="/librarian/fines" class="btn btn-outline-warning w-100">
-                  <FaIcon name="fa-coins" class="me-2" />
                   Quan ly tien phat
                 </RouterLink>
               </div>
               <div class="col-6">
                 <RouterLink to="/librarian/users" class="btn btn-outline-info w-100">
-                  <FaIcon name="fa-users" class="me-2" />
                   Nguoi dung
                 </RouterLink>
               </div>
               <div class="col-6">
                 <RouterLink to="/returns" class="btn btn-outline-secondary w-100">
-                  <FaIcon name="fa-rotate-left" class="me-2" />
                   Tra sach
                 </RouterLink>
               </div>
@@ -85,7 +76,6 @@
                 class="list-group-item px-0 py-2"
               >
                 <div class="d-flex align-items-center">
-                  <FaIcon :name="activity.icon" class="text-primary me-2" />
                   <div class="flex-grow-1">
                     <p class="mb-0">{{ activity.title }}</p>
                     <small class="text-muted">{{ activity.time }}</small>
@@ -162,14 +152,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import FaIcon from '@/components/common/FaIcon.vue'
-
 const librarianStats = [
-  { label: 'Tong so Nguoi dung', value: 15, icon: 'fa-users', tone: 'primary' },
-  { label: 'Khoan muon dang hoat dong', value: 28, icon: 'fa-book-open', tone: 'info' },
-  { label: 'Sach qua han', value: 5, icon: 'fa-triangle-exclamation', tone: 'danger' },
-  { label: 'Tien phat dang cho', value: 8, icon: 'fa-coins', tone: 'warning' },
+  { label: 'Tong so Nguoi dung', value: 15, tone: 'primary' },
+  { label: 'Khoan muon dang hoat dong', value: 28, tone: 'info' },
+  { label: 'Sach qua han', value: 5, tone: 'danger' },
+  { label: 'Tien phat dang cho', value: 8, tone: 'warning' },
 ]
 
 const pendingFines = [
@@ -186,12 +173,11 @@ const overdueLoans = [
 const recentActivities = [
   {
     id: 1,
-    icon: 'fa-user-check',
     title: 'User Nguyen Van A borrowed Clean Code',
     time: '10 mins ago',
   },
-  { id: 2, icon: 'fa-rotate-left', title: 'Design Patterns was returned', time: '1 hour ago' },
-  { id: 3, icon: 'fa-coins', title: 'Fine payment received from Pham Thu Ha', time: '2 hours ago' },
-  { id: 4, icon: 'fa-book', title: 'New book added: Vue.js 3 Guide', time: '5 hours ago' },
+  { id: 2, title: 'Design Patterns was returned', time: '1 hour ago' },
+  { id: 3, title: 'Fine payment received from Pham Thu Ha', time: '2 hours ago' },
+  { id: 4, title: 'New book added: Vue.js 3 Guide', time: '5 hours ago' },
 ]
 </script>

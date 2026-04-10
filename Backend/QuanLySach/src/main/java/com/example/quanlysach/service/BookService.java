@@ -1,7 +1,10 @@
 package com.example.quanlysach.service;
 
+import com.example.quanlysach.dto.BookDTO;
 import com.example.quanlysach.model.Book;
+import com.example.quanlysach.model.Publisher;
 import com.example.quanlysach.repository.BookRepository;
+import com.example.quanlysach.repository.PublisherRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,43 +12,95 @@ import java.util.List;
 @Service
 public class BookService {
     private final BookRepository bookRepo;
-
-    public BookService(BookRepository bookRepo) {
+    private final PublisherRepository publisherRepo;
+    public BookService(BookRepository bookRepo, PublisherRepository publisherRepo) {
         this.bookRepo = bookRepo;
+        this.publisherRepo = publisherRepo;
     }
 
-    public List<Book> getAllBooks() {
-        return bookRepo.findAll();
+    public List<BookDTO> getAllBooks() {
+       return bookRepo.findAll().stream().map(this::toBookDTO).toList();
     }
 
-    public Book getBookById(Long id) {
-        return bookRepo.findById(id).orElseThrow();
+    public BookDTO getBookById(Long id) {
+        return bookRepo.findById(id).map(this::toBookDTO).orElseThrow();
     }
 
-    public Book add(Book book) {
-        return bookRepo.save(book);
+    public BookDTO createBook(BookDTO bookDTO) {
+        Book b = toEntity(bookDTO);
+        b.setStatus("ACTIVE");
+        return toBookDTO(bookRepo.save(b));
     }
-
-    public Book update(Long id, Book book) {
-        Book b = bookRepo.findById(id).orElseThrow();
-        b.setTitle(book.getTitle());
-        b.setIsbn(book.getIsbn());
-        b.setLanguage(book.getLanguage());
-        b.setEdition(book.getEdition());
-        b.setTotalCopies(book.getTotalCopies());
-        b.setAvailableCopies(book.getAvailableCopies());
-        b.setMinLoanDays(book.getMinLoanDays());
-        b.setMaxLoanDays(book.getMaxLoanDays());
-        b.setPopularityScore(book.getPopularityScore());
-        b.setPublisherId(book.getPublisherId());
-        b.setStatus(book.getStatus());
-        return bookRepo.save(b);
-    }
-
-    public Book delete(Long id) {
+    public void deleteBookById(Long id) {
         Book b = bookRepo.findById(id).orElseThrow();
         b.setStatus("INACTIVE");
-        return bookRepo.save(b);
+        bookRepo.save(b);
     }
+
+    public BookDTO updateBook(Long id, BookDTO bookDTO) {
+        Book b = bookRepo.findById(id).orElseThrow();
+        b.setTitle(bookDTO.getTitle());
+        b.setIsbn(bookDTO.getIsbn());
+        b.setLanguage(bookDTO.getLanguage());
+        b.setEdition(bookDTO.getEdition());
+        b.setTotalCopies(bookDTO.getTotalCopies());
+        b.setAvailableCopies(bookDTO.getAvailableCopies());
+        b.setMinLoanDays(bookDTO.getMinLoanDays());
+        b.setMaxLoanDays(bookDTO.getMaxLoanDays());
+        b.setPopularityScore(bookDTO.getPopularityScore());
+        b.setStatus(bookDTO.getStatus());
+        applyPublisher(b, bookDTO.getPublisherId());
+        return toBookDTO(bookRepo.save(b));
+    }
+
+    private BookDTO toBookDTO(Book book) {
+        return new BookDTO(
+                book.getId(),
+                book.getTitle(),
+                book.getIsbn(),
+                book.getLanguage(),
+                book.getEdition(),
+                book.getTotalCopies(),
+                book.getAvailableCopies(),
+                book.getMinLoanDays(),
+                book.getMaxLoanDays(),
+                book.getPopularityScore(),
+                book.getStatus(),
+                book.getPublisherId(),
+                book.getPublisher() != null ? book.getPublisher().getName() : null
+
+        );
+    }
+
+    private Book toEntity(BookDTO bookDTO) {
+        Book book = new Book();
+        book.setTitle(bookDTO.getTitle());
+        book.setIsbn(bookDTO.getIsbn());
+        book.setLanguage(bookDTO.getLanguage());
+        book.setEdition(bookDTO.getEdition());
+        book.setTotalCopies(bookDTO.getTotalCopies());
+        book.setAvailableCopies(bookDTO.getAvailableCopies());
+        book.setMinLoanDays(bookDTO.getMinLoanDays());
+        book.setMaxLoanDays(bookDTO.getMaxLoanDays());
+        book.setPopularityScore(bookDTO.getPopularityScore());
+        book.setStatus(bookDTO.getStatus());
+
+        applyPublisher(book, bookDTO.getPublisherId());
+        return book;
+    }
+
+    private void applyPublisher(Book book, Long publisherId) {
+        book.setPublisherId(publisherId);
+
+        if (publisherId == null) {
+            book.setPublisher(null);
+            return;
+        }
+
+        Publisher publisher = publisherRepo.findById(publisherId)
+                .orElseThrow(() -> new RuntimeException("Publisher not found with id: " + publisherId));
+        book.setPublisher(publisher);
+    }
+
 }
 

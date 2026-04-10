@@ -1,19 +1,13 @@
-import axiosClient from './axios'
+import axios from 'axios'
 
-export const bookCopyApi = {
-  getAll(params) {
-    return axiosClient.get('/book-copies', { params })
-  },
-  getById(id) {
-    return axiosClient.get(`/book-copies/${id}`)
-  },
-  create(payload) {
-    return axiosClient.post('/book-copies', payload)
-  },
-  update(id, payload) {
-    return axiosClient.put(`/book-copies/${id}`, payload)
-  },
-  delete(id) {
-    return axiosClient.delete(`/book-copies/${id}`)
-  },
-}
+const API = 'http://localhost:8080/api/book-copies'
+
+export const getAll = () => axios.get(API)
+
+export const getActive = () => axios.get(`${API}/active`)
+
+export const create = (data) => axios.post(API, data)
+
+export const update = (id, data) => axios.put(`${API}/${id}`, data)
+
+export const remove = (id) => axios.delete(`${API}/${id}`)

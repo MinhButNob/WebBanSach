@@ -2,10 +2,7 @@
   <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1>Quan ly nguoi dung</h1>
-      <button class="btn btn-primary" @click="showAddForm = true">
-        <FaIcon name="fa-user-plus" class="me-2" />
-        Them nguoi dung moi
-      </button>
+      <button class="btn btn-primary" @click="showAddForm = true">Them nguoi dung moi</button>
     </div>
 
     <!-- Tim kiem & Filter -->
@@ -97,9 +94,7 @@
               </td>
               <td>{{ user.validTo }}</td>
               <td>
-                <button class="btn btn-sm btn-info me-2" @click="editUser(user)">
-                  <FaIcon name="fa-pen" />
-                </button>
+                <button class="btn btn-sm btn-info me-2" @click="editUser(user)">Sua</button>
                 <button
                   :class="[
                     'btn btn-sm me-2',
@@ -107,11 +102,9 @@
                   ]"
                   @click="toggleStatus(user)"
                 >
-                  <FaIcon :name="user.membershipStatus === 'Hoat dong' ? 'fa-ban' : 'fa-check'" />
+                  {{ user.membershipStatus === 'Hoat dong' ? 'Tam khoa' : 'Kich hoat' }}
                 </button>
-                <button class="btn btn-sm btn-danger" @click="deleteUser(user.id)">
-                  <FaIcon name="fa-trash" />
-                </button>
+                <button class="btn btn-sm btn-danger" @click="deleteUser(user.id)">Xoa</button>
               </td>
             </tr>
           </tbody>
@@ -237,7 +230,6 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import FaIcon from '@/components/common/FaIcon.vue'
 import { users } from '@/data/mockData'
 
 const searchQuery = ref('')

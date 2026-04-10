@@ -4,13 +4,12 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      apiUrl: 'http://localhost:8080/api/book-copies',
+      apiUrl: 'http://localhost:8080/api/shelves',
       form: {
         id: null,
-        bookId: '',
-        barcode: '',
-        shelfId: '',
-        status: 'AVAILABLE',
+        code: '',
+        floor: '',
+        status: 'ACTIVE',
       },
       list: [],
       errors: {},
@@ -18,53 +17,17 @@ export default {
       loading: false,
       isEditing: false,
       statusOptions: [
-        { value: 'AVAILABLE', label: 'Có sẵn' },
-        { value: 'BORROWED', label: 'Đang mượn' },
-        { value: 'LOST', label: 'Mất' },
+        { value: 'ACTIVE', label: 'Hoạt động' },
+        { value: 'INACTIVE', label: 'Ngừng hoạt động' },
       ],
-      books: [],
-      shelves: [],
     }
   },
 
-  async mounted() {
-    await this.loadReferences()
-    await this.loadData()
+  mounted() {
+    this.loadData()
   },
 
   methods: {
-    async loadReferences() {
-      const token = localStorage.getItem('token')
-      const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {}
-
-      try {
-        const [bookRes, shelfRes] = await Promise.all([
-          axios.get('http://localhost:8080/api/books', config),
-          axios.get('http://localhost:8080/api/catalog/shelves', config),
-        ])
-
-        const bookRows = Array.isArray(bookRes.data)
-          ? bookRes.data
-          : Array.isArray(bookRes.data?.content)
-            ? bookRes.data.content
-            : []
-
-        const shelfRows = Array.isArray(shelfRes.data)
-          ? shelfRes.data
-          : Array.isArray(shelfRes.data?.content)
-            ? shelfRes.data.content
-            : []
-
-        this.books = bookRows.map((item) => ({ id: String(item.id), title: item.title || '' }))
-        this.shelves = shelfRows.map((item) => ({
-          id: String(item.id),
-          name: item.name || item.code || '',
-        }))
-      } catch (error) {
-        this.message = 'Không thể tải dữ liệu tham chiếu'
-      }
-    },
-
     async loadData() {
       this.loading = true
       this.message = ''
@@ -88,13 +51,12 @@ export default {
 
         this.list = rows.map((item) => ({
           id: item.id,
-          bookId: String(item.bookId ?? item.book?.id ?? ''),
-          barcode: item.barcode || '',
-          shelfId: String(item.shelfId ?? item.shelf?.id ?? ''),
-          status: item.status || 'AVAILABLE',
+          code: item.code || item.name || '',
+          floor: item.floor || item.location || '',
+          status: item.status || 'ACTIVE',
         }))
       } catch (error) {
-        this.message = 'Không thể tải danh sách bản sao sách'
+        this.message = 'Không thể tải danh sách kệ sách'
       } finally {
         this.loading = false
       }
@@ -110,9 +72,8 @@ export default {
         await axios.post(
           this.apiUrl,
           {
-            bookId: Number(this.form.bookId),
-            barcode: this.form.barcode,
-            shelfId: Number(this.form.shelfId),
+            code: this.form.code,
+            floor: this.form.floor,
             status: this.form.status,
           },
           config,
@@ -120,7 +81,7 @@ export default {
         this.reset()
         this.loadData()
       } catch (error) {
-        this.message = 'Không thể thêm bản sao sách'
+        this.message = 'Không thể thêm kệ sách'
       }
     },
 
@@ -134,9 +95,8 @@ export default {
         await axios.put(
           `${this.apiUrl}/${this.form.id}`,
           {
-            bookId: Number(this.form.bookId),
-            barcode: this.form.barcode,
-            shelfId: Number(this.form.shelfId),
+            code: this.form.code,
+            floor: this.form.floor,
             status: this.form.status,
           },
           config,
@@ -144,7 +104,7 @@ export default {
         this.reset()
         this.loadData()
       } catch (error) {
-        this.message = 'Không thể cập nhật bản sao sách'
+        this.message = 'Không thể cập nhật kệ sách'
       }
     },
 
@@ -158,7 +118,7 @@ export default {
         await axios.delete(`${this.apiUrl}/${id}`, config)
         this.loadData()
       } catch (error) {
-        this.message = 'Không thể xóa bản sao sách'
+        this.message = 'Không thể xóa kệ sách'
       }
     },
 
@@ -168,9 +128,8 @@ export default {
       this.message = ''
       this.form = {
         id: item.id,
-        bookId: item.bookId,
-        barcode: item.barcode,
-        shelfId: item.shelfId,
+        code: item.code,
+        floor: item.floor,
         status: item.status,
       }
     },
@@ -181,24 +140,20 @@ export default {
       this.message = ''
       this.form = {
         id: null,
-        bookId: '',
-        barcode: '',
-        shelfId: '',
-        status: 'AVAILABLE',
+        code: '',
+        floor: '',
+        status: 'ACTIVE',
       }
     },
 
     validate() {
       this.errors = {}
 
-      if (!this.form.bookId) {
-        this.errors.bookId = 'Vui lòng chọn sách'
+      if (!this.form.code || !this.form.code.trim()) {
+        this.errors.code = 'Mã kệ không được để trống'
       }
-      if (!this.form.barcode || !this.form.barcode.trim()) {
-        this.errors.barcode = 'Mã bản sao không được để trống'
-      }
-      if (!this.form.shelfId) {
-        this.errors.shelfId = 'Vui lòng chọn kệ sách'
+      if (!this.form.floor || !this.form.floor.trim()) {
+        this.errors.floor = 'Tầng không được để trống'
       }
 
       return Object.keys(this.errors).length === 0
@@ -209,41 +164,25 @@ export default {
 
 <template>
   <div class="container py-4">
-    <h4 class="mb-3">Quản lý bản sao sách</h4>
+    <h4 class="mb-3">Quản lý kệ sách</h4>
 
     <div class="row g-3">
       <div class="col-12 col-lg-4">
         <div class="card">
           <div class="card-header">
-            <strong>{{ isEditing ? 'Cập nhật bản sao sách' : 'Thêm bản sao sách' }}</strong>
+            <strong>{{ isEditing ? 'Cập nhật kệ sách' : 'Thêm kệ sách' }}</strong>
           </div>
           <div class="card-body">
             <div class="mb-3">
-              <label class="form-label">Sách</label>
-              <select v-model="form.bookId" class="form-select">
-                <option value="">Chọn sách</option>
-                <option v-for="item in books" :key="item.id" :value="item.id">
-                  {{ item.title }}
-                </option>
-              </select>
-              <div v-if="errors.bookId" class="text-danger small mt-1">{{ errors.bookId }}</div>
+              <label class="form-label">Mã kệ</label>
+              <input v-model="form.code" type="text" class="form-control" />
+              <div v-if="errors.code" class="text-danger small mt-1">{{ errors.code }}</div>
             </div>
 
             <div class="mb-3">
-              <label class="form-label">Mã bản sao</label>
-              <input v-model="form.barcode" type="text" class="form-control" />
-              <div v-if="errors.barcode" class="text-danger small mt-1">{{ errors.barcode }}</div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Kệ sách</label>
-              <select v-model="form.shelfId" class="form-select">
-                <option value="">Chọn kệ sách</option>
-                <option v-for="item in shelves" :key="item.id" :value="item.id">
-                  {{ item.name }}
-                </option>
-              </select>
-              <div v-if="errors.shelfId" class="text-danger small mt-1">{{ errors.shelfId }}</div>
+              <label class="form-label">Tầng</label>
+              <input v-model="form.floor" type="text" class="form-control" />
+              <div v-if="errors.floor" class="text-danger small mt-1">{{ errors.floor }}</div>
             </div>
 
             <div class="mb-3">
@@ -272,9 +211,8 @@ export default {
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Sách</th>
-                  <th>Mã bản sao</th>
-                  <th>Kệ sách</th>
+                  <th>Mã kệ</th>
+                  <th>Tầng</th>
                   <th>Trạng thái</th>
                   <th>Thao tác</th>
                 </tr>
@@ -282,15 +220,8 @@ export default {
               <tbody>
                 <tr v-for="item in list" :key="item.id">
                   <td>{{ item.id }}</td>
-                  <td>
-                    {{ (books.find((book) => book.id === String(item.bookId)) || {}).title || '' }}
-                  </td>
-                  <td>{{ item.barcode }}</td>
-                  <td>
-                    {{
-                      (shelves.find((shelf) => shelf.id === String(item.shelfId)) || {}).name || ''
-                    }}
-                  </td>
+                  <td>{{ item.code }}</td>
+                  <td>{{ item.floor }}</td>
                   <td>
                     <span
                       class="badge"
@@ -305,7 +236,7 @@ export default {
                   </td>
                 </tr>
                 <tr v-if="!list.length">
-                  <td colspan="6" class="text-center text-muted py-3">
+                  <td colspan="5" class="text-center text-muted py-3">
                     {{ loading ? 'Đang tải dữ liệu...' : 'Chưa có dữ liệu' }}
                   </td>
                 </tr>

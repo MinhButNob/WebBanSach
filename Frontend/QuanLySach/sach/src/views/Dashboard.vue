@@ -19,10 +19,7 @@ import { currentLoans, dashboardStats, recentActivity, topBorrowedBooks } from '
     <div class="row g-3 mb-4">
       <div v-for="stat in dashboardStats" :key="stat.label" class="col-12 col-sm-6 col-xl-3">
         <div class="card h-100">
-          <div class="card-body d-flex align-items-center gap-3">
-            <div class="d-flex align-items-center justify-content-center" style="width: 40px">
-              <FaIcon :name="stat.icon" />
-            </div>
+          <div class="card-body">
             <div>
               <div class="text-muted small">{{ stat.label }}</div>
               <div class="h4 fw-bold mb-0">{{ stat.value }}</div>
@@ -81,16 +78,21 @@ import { currentLoans, dashboardStats, recentActivity, topBorrowedBooks } from '
           <div class="card-header">
             <h2 class="h5 mb-0">Sach duoc muon nhieu</h2>
           </div>
-          <div class="card-body">
-            <div v-for="book in topBorrowedBooks" :key="book.title" class="mb-3">
-              <div class="d-flex justify-content-between small mb-1">
-                <span class="fw-semibold">{{ book.title }}</span>
-                <span class="text-muted">{{ book.count }}</span>
-              </div>
-              <div class="progress" style="height: 10px">
-                <div class="progress-bar bg-primary" :style="{ width: `${book.count}%` }"></div>
-              </div>
-            </div>
+          <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Tên sách</th>
+                  <th class="text-end">Lượt mượn</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="book in topBorrowedBooks" :key="book.title">
+                  <td class="fw-semibold">{{ book.title }}</td>
+                  <td class="text-end">{{ book.count }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -101,17 +103,7 @@ import { currentLoans, dashboardStats, recentActivity, topBorrowedBooks } from '
             <h2 class="h5 mb-0">Hoat dong gan day</h2>
           </div>
           <div class="list-group list-group-flush">
-            <div
-              v-for="activity in recentActivity"
-              :key="activity.id"
-              class="list-group-item d-flex gap-3 align-items-start"
-            >
-              <div
-                class="rounded-circle bg-body-secondary d-flex align-items-center justify-content-center"
-                style="width: 42px; height: 42px"
-              >
-                <FaIcon :name="activity.icon" />
-              </div>
+            <div v-for="activity in recentActivity" :key="activity.id" class="list-group-item">
               <div>
                 <div class="fw-semibold">{{ activity.title }}</div>
                 <small class="text-muted">{{ activity.time }}</small>

@@ -31,7 +31,7 @@ public class ShelfController {
         return service.add(shelf);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public Shelf updateShelf(@PathVariable Long id, @RequestBody Shelf shelf) {
         return service.update(id, shelf);
     }

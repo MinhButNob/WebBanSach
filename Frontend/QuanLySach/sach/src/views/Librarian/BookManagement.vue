@@ -2,10 +2,7 @@
   <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1>Quan ly sach</h1>
-      <button class="btn btn-primary" @click="showAddForm = true">
-        <FaIcon name="fa-plus" class="me-2" />
-        Them sach moi
-      </button>
+      <button class="btn btn-primary" @click="showAddForm = true">Them sach moi</button>
     </div>
 
     <!-- Tim kiem & Filter -->
@@ -42,7 +39,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="book in filteredSach" :key="book.id">
+            <tr v-for="book in filteredBooks" :key="book.id">
               <td>
                 <strong>{{ book.title }}</strong>
               </td>
@@ -58,12 +55,8 @@
                 </span>
               </td>
               <td>
-                <button class="btn btn-sm btn-warning me-2" @click="editBook(book)">
-                  <FaIcon name="fa-pen" />
-                </button>
-                <button class="btn btn-sm btn-danger" @click="deleteBook(book.id)">
-                  <FaIcon name="fa-trash" />
-                </button>
+                <button class="btn btn-sm btn-warning me-2" @click="editBook(book)">Sua</button>
+                <button class="btn btn-sm btn-danger" @click="deleteBook(book.id)">Xoa</button>
               </td>
             </tr>
           </tbody>
@@ -149,7 +142,6 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import FaIcon from '@/components/common/FaIcon.vue'
 import { books, categories } from '@/data/mockData'
 
 const searchQuery = ref('')

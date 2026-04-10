@@ -31,7 +31,7 @@ public class MembershipController {
         return service.add(memberShip);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public MemberShip updateMemberShip(@PathVariable Long id, @RequestBody MemberShip memberShip) {
         return service.update(id, memberShip);
     }

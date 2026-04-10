@@ -2,10 +2,7 @@
   <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1>Quan ly kho sach</h1>
-      <button class="btn btn-primary" @click="showAddCopy = true">
-        <FaIcon name="fa-plus" class="me-2" />
-        Them ban sao
-      </button>
+      <button class="btn btn-primary" @click="showAddCopy = true">Them ban sao</button>
     </div>
 
     <!-- Inventory Summary -->
@@ -108,12 +105,8 @@
                 <code>{{ copy.barcode }}</code>
               </td>
               <td>
-                <button class="btn btn-sm btn-info me-2" @click="editCopy(copy)">
-                  <FaIcon name="fa-pen" />
-                </button>
-                <button class="btn btn-sm btn-danger" @click="deleteCopy(copy.id)">
-                  <FaIcon name="fa-trash" />
-                </button>
+                <button class="btn btn-sm btn-info me-2" @click="editCopy(copy)">Sua</button>
+                <button class="btn btn-sm btn-danger" @click="deleteCopy(copy.id)">Xoa</button>
               </td>
             </tr>
           </tbody>
@@ -183,7 +176,6 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import FaIcon from '@/components/common/FaIcon.vue'
 import { books } from '@/data/mockData'
 
 const searchQuery = ref('')

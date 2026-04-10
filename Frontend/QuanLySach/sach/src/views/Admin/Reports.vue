@@ -21,10 +21,7 @@ const generateReport = () => {
         <h1 class="h3 fw-bold mb-1">Admin Bao cao</h1>
         <p class="text-muted mb-0">Tao bao cao su dung va tai chinh theo khoang ngay da chon.</p>
       </div>
-      <button type="button" class="btn btn-primary" @click="generateReport">
-        <FaIcon name="fa-file-export" class="me-2" />
-        Tao bao cao
-      </button>
+      <button type="button" class="btn btn-primary" @click="generateReport">Tao bao cao</button>
     </div>
 
     <div class="card border-0 shadow-sm mb-4">

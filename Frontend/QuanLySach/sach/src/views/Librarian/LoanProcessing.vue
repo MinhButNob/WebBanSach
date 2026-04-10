@@ -10,7 +10,6 @@
           type="button"
           role="tab"
         >
-          <FaIcon name="fa-hand" class="me-2" />
           Issue Book
         </button>
       </li>
@@ -21,7 +20,6 @@
           type="button"
           role="tab"
         >
-          <FaIcon name="fa-rotate-left" class="me-2" />
           Accept Tra
         </button>
       </li>
@@ -32,7 +30,6 @@
           type="button"
           role="tab"
         >
-          <FaIcon name="fa-book-open" class="me-2" />
           Hoat dong Muon sach
         </button>
       </li>
@@ -67,10 +64,7 @@
                   placeholder="1001"
                 />
               </div>
-              <button @click="issueBook" class="btn btn-success w-100">
-                <FaIcon name="fa-check" class="me-2" />
-                Issue Book
-              </button>
+              <button @click="issueBook" class="btn btn-success w-100">Issue Book</button>
             </div>
           </div>
         </div>
@@ -87,7 +81,7 @@
               <p><strong>Khoan dang muon:</strong> {{ selectedUserForIssue.currentLoans }}</p>
               <p><strong>Toi da muon sach:</strong> {{ selectedUserForIssue.maxLoans }}</p>
               <div v-if="selectedUserForIssue.penaltyBalance > 0" class="alert alert-warning">
-                <strong>⚠️ Penalty Balance:</strong>
+                <strong>Penalty Balance:</strong>
                 {{ selectedUserForIssue.penaltyBalance.toLocaleString() }} VND
               </div>
             </div>
@@ -127,10 +121,7 @@
                 <label class="form-label">Notes</label>
                 <textarea v-model="returnForm.notes" class="form-control" rows="2"></textarea>
               </div>
-              <button @click="acceptTra" class="btn btn-warning w-100">
-                <FaIcon name="fa-check" class="me-2" />
-                Accept Tra
-              </button>
+              <button @click="acceptTra" class="btn btn-warning w-100">Accept Tra</button>
             </div>
           </div>
         </div>
@@ -146,7 +137,7 @@
               <p><strong>Loan Date:</strong> {{ returnSummary.loanDate }}</p>
               <p><strong>Due Date:</strong> {{ returnSummary.dueDate }}</p>
               <div v-if="returnSummary.daysOverdue > 0" class="alert alert-danger">
-                <strong>⚠️ Qua han Days:</strong> {{ returnSummary.daysOverdue }}
+                <strong>Qua han Days:</strong> {{ returnSummary.daysOverdue }}
               </div>
             </div>
           </div>
@@ -195,7 +186,7 @@
                 </td>
                 <td>
                   <button class="btn btn-sm btn-success" @click="extendLoan(loan.id)">
-                    <FaIcon name="fa-calendar-plus" />
+                    Gia han
                   </button>
                 </td>
               </tr>
@@ -209,7 +200,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import FaIcon from '@/components/common/FaIcon.vue'
 import { users } from '@/data/mockData'
 
 const activeTab = ref('issueBook')

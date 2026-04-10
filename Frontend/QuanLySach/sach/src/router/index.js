@@ -10,7 +10,6 @@ import Fines from '../views/Fines.vue'
 import AdminUsers from '../views/Admin/Users.vue'
 import AdminReports from '../views/Admin/Reports.vue'
 import LibrarianDashboard from '../views/Librarian/Dashboard.vue'
-import BookManagement from '../views/Librarian/BookManagement.vue'
 import InventoryManagement from '../views/Librarian/InventoryManagement.vue'
 import LoanProcessing from '../views/Librarian/LoanProcessing.vue'
 import FineManagement from '../views/Librarian/FineManagement.vue'
@@ -19,6 +18,11 @@ import UserReservationsPage from '../pages/user/ReservationsPage.vue'
 import UserPaymentsPage from '../pages/user/PaymentsPage.vue'
 import AdminReservationsPage from '../pages/admin/ReservationsPage.vue'
 import AdminBookCopiesPage from '../pages/admin/BookCopiesPage.vue'
+import AdminBooksPage from '../pages/admin/BooksPage.vue'
+import AdminAuthorsPage from '../pages/admin/AuthorsPage.vue'
+import AdminCategoriesPage from '../pages/admin/CategoriesPage.vue'
+import AdminPublishersPage from '../pages/admin/PublishersPage.vue'
+import AdminShelvesPage from '../pages/admin/ShelvesPage.vue'
 import AdminCatalogsPage from '../pages/admin/CatalogsPage.vue'
 import AdminPaymentsPage from '../pages/admin/PaymentsPage.vue'
 import { authState } from '../stores/auth'
@@ -45,6 +49,11 @@ const router = createRouter({
     { path: '/admin/users', component: AdminUsers },
     { path: '/admin/reports', component: AdminReports },
     {
+      path: '/admin/books',
+      component: AdminBooksPage,
+      meta: { roles: ['Admin', 'Librarian'] },
+    },
+    {
       path: '/admin/reservations',
       component: AdminReservationsPage,
       meta: { roles: ['Admin', 'Librarian'] },
@@ -52,6 +61,26 @@ const router = createRouter({
     {
       path: '/admin/book-copies',
       component: AdminBookCopiesPage,
+      meta: { roles: ['Admin', 'Librarian'] },
+    },
+    {
+      path: '/admin/authors',
+      component: AdminAuthorsPage,
+      meta: { roles: ['Admin', 'Librarian'] },
+    },
+    {
+      path: '/admin/categories',
+      component: AdminCategoriesPage,
+      meta: { roles: ['Admin', 'Librarian'] },
+    },
+    {
+      path: '/admin/publishers',
+      component: AdminPublishersPage,
+      meta: { roles: ['Admin', 'Librarian'] },
+    },
+    {
+      path: '/admin/shelves',
+      component: AdminShelvesPage,
       meta: { roles: ['Admin', 'Librarian'] },
     },
     { path: '/admin/catalogs', component: AdminCatalogsPage, meta: { roles: ['Admin'] } },
@@ -62,13 +91,17 @@ const router = createRouter({
     },
     { path: '/librarian', redirect: '/librarian/dashboard' },
     { path: '/librarian/dashboard', component: LibrarianDashboard },
-    { path: '/librarian/books', component: BookManagement },
+    { path: '/librarian/books', redirect: '/admin/books' },
     { path: '/librarian/inventory', component: InventoryManagement },
     { path: '/librarian/loans', component: LoanProcessing },
     { path: '/librarian/fines', component: FineManagement },
     { path: '/librarian/users', component: UserManagement },
     { path: '/librarian/reservations', redirect: '/admin/reservations' },
     { path: '/librarian/book-copies', redirect: '/admin/book-copies' },
+    { path: '/librarian/authors', redirect: '/admin/authors' },
+    { path: '/librarian/categories', redirect: '/admin/categories' },
+    { path: '/librarian/publishers', redirect: '/admin/publishers' },
+    { path: '/librarian/shelves', redirect: '/admin/shelves' },
     { path: '/librarian/payments', redirect: '/admin/payments' },
   ],
 })
