@@ -7,8 +7,8 @@ export default {
       apiUrl: 'http://localhost:8080/api/shelves',
       form: {
         id: null,
-        code: '',
-        floor: '',
+        name: '',        // Đổi từ code thành name
+        location: '',    // Đổi từ floor thành location
         status: 'ACTIVE',
       },
       list: [],
@@ -51,12 +51,13 @@ export default {
 
         this.list = rows.map((item) => ({
           id: item.id,
-          code: item.code || item.name || '',
-          floor: item.floor || item.location || '',
+          name: item.name || '',      // Đổi từ code thành name
+          location: item.location || '', // Đổi từ floor thành location
           status: item.status || 'ACTIVE',
         }))
       } catch (error) {
         this.message = 'Không thể tải danh sách kệ sách'
+        console.error(error)
       } finally {
         this.loading = false
       }
@@ -72,16 +73,19 @@ export default {
         await axios.post(
           this.apiUrl,
           {
-            code: this.form.code,
-            floor: this.form.floor,
+            name: this.form.name,      // Đổi từ code thành name
+            location: this.form.location, // Đổi từ floor thành location
             status: this.form.status,
           },
           config,
         )
         this.reset()
         this.loadData()
+        this.message = 'Thêm kệ sách thành công!'
+        setTimeout(() => this.message = '', 3000)
       } catch (error) {
         this.message = 'Không thể thêm kệ sách'
+        console.error(error)
       }
     },
 
@@ -95,16 +99,19 @@ export default {
         await axios.put(
           `${this.apiUrl}/${this.form.id}`,
           {
-            code: this.form.code,
-            floor: this.form.floor,
+            name: this.form.name,      // Đổi từ code thành name
+            location: this.form.location, // Đổi từ floor thành location
             status: this.form.status,
           },
           config,
         )
         this.reset()
         this.loadData()
+        this.message = 'Cập nhật kệ sách thành công!'
+        setTimeout(() => this.message = '', 3000)
       } catch (error) {
         this.message = 'Không thể cập nhật kệ sách'
+        console.error(error)
       }
     },
 
@@ -117,8 +124,11 @@ export default {
       try {
         await axios.delete(`${this.apiUrl}/${id}`, config)
         this.loadData()
+        this.message = 'Xóa kệ sách thành công!'
+        setTimeout(() => this.message = '', 3000)
       } catch (error) {
         this.message = 'Không thể xóa kệ sách'
+        console.error(error)
       }
     },
 
@@ -128,8 +138,8 @@ export default {
       this.message = ''
       this.form = {
         id: item.id,
-        code: item.code,
-        floor: item.floor,
+        name: item.name,        // Đổi từ code thành name
+        location: item.location, // Đổi từ floor thành location
         status: item.status,
       }
     },
@@ -140,8 +150,8 @@ export default {
       this.message = ''
       this.form = {
         id: null,
-        code: '',
-        floor: '',
+        name: '',      // Đổi từ code thành name
+        location: '',  // Đổi từ floor thành location
         status: 'ACTIVE',
       }
     },
@@ -149,11 +159,11 @@ export default {
     validate() {
       this.errors = {}
 
-      if (!this.form.code || !this.form.code.trim()) {
-        this.errors.code = 'Mã kệ không được để trống'
+      if (!this.form.name || !this.form.name.trim()) {
+        this.errors.name = 'Mã kệ không được để trống'
       }
-      if (!this.form.floor || !this.form.floor.trim()) {
-        this.errors.floor = 'Tầng không được để trống'
+      if (!this.form.location || !this.form.location.trim()) {
+        this.errors.location = 'Tầng không được để trống'
       }
 
       return Object.keys(this.errors).length === 0
@@ -166,6 +176,11 @@ export default {
   <div class="container py-4">
     <h4 class="mb-3">Quản lý kệ sách</h4>
 
+    <div v-if="message" class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" @click="message = ''"></button>
+    </div>
+
     <div class="row g-3">
       <div class="col-12 col-lg-4">
         <div class="card">
@@ -175,14 +190,14 @@ export default {
           <div class="card-body">
             <div class="mb-3">
               <label class="form-label">Mã kệ</label>
-              <input v-model="form.code" type="text" class="form-control" />
-              <div v-if="errors.code" class="text-danger small mt-1">{{ errors.code }}</div>
+              <input v-model="form.name" type="text" class="form-control" placeholder="Nhập mã kệ" />
+              <div v-if="errors.name" class="text-danger small mt-1">{{ errors.name }}</div>
             </div>
 
             <div class="mb-3">
               <label class="form-label">Tầng</label>
-              <input v-model="form.floor" type="text" class="form-control" />
-              <div v-if="errors.floor" class="text-danger small mt-1">{{ errors.floor }}</div>
+              <input v-model="form.location" type="text" class="form-control" placeholder="Nhập tầng" />
+              <div v-if="errors.location" class="text-danger small mt-1">{{ errors.location }}</div>
             </div>
 
             <div class="mb-3">
@@ -203,12 +218,10 @@ export default {
       </div>
 
       <div class="col-12 col-lg-8">
-        <div v-if="message" class="alert alert-danger">{{ message }}</div>
-
         <div class="card">
           <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead>
+            <table class="table table-bordered table-hover">
+              <thead class="table-light">
                 <tr>
                   <th>ID</th>
                   <th>Mã kệ</th>
@@ -220,24 +233,35 @@ export default {
               <tbody>
                 <tr v-for="item in list" :key="item.id">
                   <td>{{ item.id }}</td>
-                  <td>{{ item.code }}</td>
-                  <td>{{ item.floor }}</td>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.location }}</td>
                   <td>
                     <span
                       class="badge"
                       :class="item.status === 'ACTIVE' ? 'bg-success' : 'bg-secondary'"
                     >
-                      {{ item.status }}
+                      {{ item.status === 'ACTIVE' ? 'Hoạt động' : 'Ngừng hoạt động' }}
                     </span>
                   </td>
                   <td>
-                    <button class="btn btn-warning btn-sm me-2" @click="edit(item)">Sửa</button>
-                    <button class="btn btn-danger btn-sm" @click="remove(item.id)">Xóa</button>
+                    <button class="btn btn-warning btn-sm me-2" @click="edit(item)">
+                      <i class="bi bi-pencil"></i> Sửa
+                    </button>
+                    <button class="btn btn-danger btn-sm" @click="remove(item.id)">
+                      <i class="bi bi-trash"></i> Xóa
+                    </button>
                   </td>
                 </tr>
-                <tr v-if="!list.length">
-                  <td colspan="5" class="text-center text-muted py-3">
-                    {{ loading ? 'Đang tải dữ liệu...' : 'Chưa có dữ liệu' }}
+                <tr v-if="!list.length && !loading">
+                  <td colspan="5" class="text-center text-muted py-4">
+                    <i class="bi bi-inbox"></i> Chưa có dữ liệu
+                  </td>
+                </tr>
+                <tr v-if="loading">
+                  <td colspan="5" class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Đang tải...</span>
+                    </div>
                   </td>
                 </tr>
               </tbody>

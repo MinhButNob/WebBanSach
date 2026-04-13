@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookCopyRequestDto {
+public class BookCopyRequestDTO {
     private Long bookId;
     private String barcode;
     private String status;

@@ -7,7 +7,9 @@ import { authState, logout } from '../../stores/auth'
 const router = useRouter()
 const route = useRoute()
 
-const isStaff = computed(() => ['Admin', 'Librarian'].includes(authState.currentUser.role))
+const currentUser = computed(() => authState.currentUser)
+const currentRole = computed(() => currentUser.value?.role || currentUser.value?.roleName)
+const isStaff = computed(() => ['Admin', 'Librarian'].includes(currentRole.value))
 
 const navigationItems = computed(() => {
   const items = [
@@ -20,7 +22,7 @@ const navigationItems = computed(() => {
     { label: 'Tiền phạt', to: '/fines' },
   ]
 
-  if (authState.currentUser.role === 'Librarian') {
+  if (currentRole.value === 'Librarian') {
     items.length = 0 // Clear student menu
     items.push(
       { label: 'Bảng điều khiển', to: '/librarian/dashboard' },
@@ -38,12 +40,10 @@ const navigationItems = computed(() => {
       { label: 'Người dùng', to: '/librarian/users' },
       { label: 'Trả sách', to: '/returns' },
     )
-  } else if (authState.currentUser.role === 'Admin') {
+  } else if (currentRole.value === 'Admin') {
     items.length = 0 // Clear student menu
     items.push(
-      { label: 'Bảng điều khiển', to: '/dashboard' },
-      { label: 'Người dùng', to: '/admin/users' },
-      { label: 'Báo cáo', to: '/admin/reports' },
+      { label: 'Bảng điều khiển', to: '/admin/dashboard' },
       { label: 'Quản lý sách', to: '/admin/books' },
       { label: 'Bản sao sách', to: '/admin/book-copies' },
       { label: 'Danh mục tác giả', to: '/admin/authors' },
@@ -85,7 +85,7 @@ const handleLogout = () => {
       </ul>
 
       <div class="mt-auto pt-3 border-top border-secondary-subtle">
-        <div class="small text-white-50 mb-2">{{ authState.currentUser.name }}</div>
+        <div class="small text-white-50 mb-2">{{ currentUser?.name || 'Người dùng' }}</div>
         <button class="btn btn-outline-light btn-sm w-100" type="button" @click="handleLogout">
           Đăng xuất
         </button>
@@ -134,7 +134,7 @@ const handleLogout = () => {
         </ul>
 
         <div class="mt-auto pt-3 border-top">
-          <div class="small text-muted mb-2">{{ authState.currentUser.name }}</div>
+          <div class="small text-muted mb-2">{{ currentUser?.name || 'Người dùng' }}</div>
           <button class="btn btn-outline-danger btn-sm w-100" type="button" @click="handleLogout">
             Đăng xuất
           </button>
@@ -170,10 +170,10 @@ const handleLogout = () => {
 
         <div class="d-flex align-items-center gap-2">
           <span
-            v-if="authState.currentUser.penaltyBalance > 0"
+            v-if="(currentUser?.penaltyBalance || 0) > 0"
             class="badge text-bg-warning text-dark"
           >
-            {{ authState.currentUser.penaltyBalance.toLocaleString() }} VND
+            {{ currentUser.penaltyBalance.toLocaleString() }} VND
           </span>
 
           <div class="dropdown">
@@ -182,7 +182,7 @@ const handleLogout = () => {
               data-bs-toggle="dropdown"
               type="button"
             >
-              {{ authState.currentUser.name }}
+              {{ currentUser?.name || 'Người dùng' }}
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
               <li>

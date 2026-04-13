@@ -1,26 +1,50 @@
+// src/stores/auth.js
 import { reactive } from 'vue'
-import { users } from '../data/mockData'
-
-const storageKey = 'library-demo-user-email'
-
-const resolveUser = (email) => users.find((user) => user.email === email) ?? users[0]
-
-const storedEmail = typeof window !== 'undefined' ? window.localStorage.getItem(storageKey) : null
 
 export const authState = reactive({
-  currentUser: resolveUser(storedEmail),
+  currentUser: null,
+  token: null,
+  isAuthenticated: false,
 })
 
-export const loginAsEmail = (email) => {
-  authState.currentUser = resolveUser(email)
-  if (typeof window !== 'undefined') {
-    window.localStorage.setItem(storageKey, authState.currentUser.email)
+// Khởi tạo từ localStorage
+export const initAuth = () => {
+  const token = localStorage.getItem('token')
+  const userStr = localStorage.getItem('user')
+
+  if (token && userStr) {
+    try {
+      authState.currentUser = JSON.parse(userStr)
+      authState.token = token
+      authState.isAuthenticated = true
+    } catch (e) {
+      console.warn('Invalid auth data in localStorage. Resetting auth state.', e)
+      authState.currentUser = null
+      authState.token = null
+      authState.isAuthenticated = false
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+    }
   }
 }
 
-export const logout = () => {
-  authState.currentUser = users[0]
-  if (typeof window !== 'undefined') {
-    window.localStorage.removeItem(storageKey)
-  }
+// Đăng nhập
+export const login = (userData, token) => {
+  authState.currentUser = userData
+  authState.token = token
+  authState.isAuthenticated = true
+  localStorage.setItem('token', token)
+  localStorage.setItem('user', JSON.stringify(userData))
 }
+
+// Đăng xuất - QUAN TRỌNG: phải reset hoàn toàn
+export const logout = () => {
+  authState.currentUser = null
+  authState.token = null
+  authState.isAuthenticated = false
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+  // Không gọi router.push ở đây, để component gọi
+}
+
+initAuth()

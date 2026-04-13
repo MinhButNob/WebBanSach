@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDTO {
+public class UserResponseDTO {
     private Long id;
     private String name;
     private String email;
@@ -24,7 +24,6 @@ public class UserDTO {
     private Integer overdueCount;
     private Integer reservationLimit;
     private BigDecimal penaltyBalance;
-    private Long roleId;
-    private Long membershipId;
     private String roleName;
+    private String token;
 }

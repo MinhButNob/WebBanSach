@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+
 @Entity
 @Table(name = "books")
 @Setter
@@ -54,4 +56,6 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "publisher_id", insertable = false, updatable = false)
     private Publisher publisher;
+
+    // Không cần thêm gì về categories ở đây
 }

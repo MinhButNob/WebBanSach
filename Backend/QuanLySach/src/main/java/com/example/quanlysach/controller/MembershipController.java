@@ -1,6 +1,6 @@
 package com.example.quanlysach.controller;
 
-import com.example.quanlysach.model.MemberShip;
+import com.example.quanlysach.model.Membership;
 import com.example.quanlysach.service.MembershipService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,27 +17,27 @@ public class MembershipController {
     }
 
     @GetMapping
-    public List<MemberShip> getAllMemberShip() {
+    public List<Membership> getAllMemberShip() {
         return service.getAllMemberShip();
     }
 
     @GetMapping("/{id}")
-    public MemberShip getMemberShipById(@PathVariable Long id) {
+    public Membership getMemberShipById(@PathVariable Long id) {
         return service.getMemberShipById(id);
     }
 
     @PostMapping
-    public MemberShip addMemberShip(@RequestBody MemberShip memberShip) {
+    public Membership addMemberShip(@RequestBody Membership memberShip) {
         return service.add(memberShip);
     }
 
     @PutMapping("/{id}")
-    public MemberShip updateMemberShip(@PathVariable Long id, @RequestBody MemberShip memberShip) {
+    public Membership updateMemberShip(@PathVariable Long id, @RequestBody Membership memberShip) {
         return service.update(id, memberShip);
     }
 
     @DeleteMapping("/{id}")
-    public MemberShip deleteMemberShip(@PathVariable Long id) {
+    public Membership deleteMemberShip(@PathVariable Long id) {
         return service.delete(id);
     }
 }

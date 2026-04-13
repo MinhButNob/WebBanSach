@@ -6,9 +6,11 @@ import { authState } from './stores/auth'
 
 const route = useRoute()
 
-const showNavbar = computed(() => route.path !== '/login')
+const showNavbar = computed(() => !['/login', '/register'].includes(route.path))
 const isStaffLayout = computed(
-  () => showNavbar.value && ['Admin', 'Librarian'].includes(authState.currentUser.role),
+  () =>
+    showNavbar.value &&
+    ['Admin', 'Librarian'].includes(authState.currentUser?.role || authState.currentUser?.roleName),
 )
 </script>
 

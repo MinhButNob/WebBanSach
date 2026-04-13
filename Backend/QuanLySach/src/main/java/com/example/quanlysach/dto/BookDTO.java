@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -22,9 +24,14 @@ public class BookDTO {
     private Integer popularityScore;
     private Long publisherId;
     private String status;
+    private String publisherName;  // Thêm tên nhà xuất bản
+    private List<String> categories;  // Thêm danh sách thể loại
+    private List<String> authors;  // Thêm danh sách tác giả (nếu cần)
 
-    public BookDTO(Long id, String title, String isbn, String language, String edition, Integer totalCopies, Integer availableCopies, Integer minLoanDays, Integer maxLoanDays, Integer popularityScore, String status, Long aLong, String s) {
-
+    public BookDTO(Long id, String title, String isbn, String language, String edition,
+                   Integer totalCopies, Integer availableCopies, Integer minLoanDays,
+                   Integer maxLoanDays, Integer popularityScore, String status,
+                   Long publisherId, String publisherName) {
         this.id = id;
         this.title = title;
         this.isbn = isbn;
@@ -36,7 +43,9 @@ public class BookDTO {
         this.maxLoanDays = maxLoanDays;
         this.popularityScore = popularityScore;
         this.status = status;
-        this.publisherId = aLong;
+        this.publisherId = publisherId;
+        this.publisherName = publisherName;
+        this.categories = null;
+        this.authors = null;
     }
 }
-
